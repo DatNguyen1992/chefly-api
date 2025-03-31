@@ -1,10 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 
 @Controller()
 export class AppController {
-  constructor(@InjectConnection() private readonly connection: Connection) {}
+  constructor(
+    @InjectConnection() private readonly connection: Connection,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get()
   testConnection() {
@@ -35,5 +39,12 @@ export class AppController {
   @Get('/test')
   getHome() {
     return { message: 'API is running!' };
+  }
+
+  @Get('/env-check')
+  getEnvCheck() {
+    return {
+      database_username: this.configService.get('DB_USERNAME'), // Example env variable
+    };
   }
 }
