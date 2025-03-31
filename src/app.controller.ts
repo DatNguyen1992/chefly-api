@@ -31,4 +31,9 @@ export class AppController {
       };
     }
   }
+
+  @Get('/test')
+  getHome() {
+    return { message: 'API is running!' };
+  }
 }
