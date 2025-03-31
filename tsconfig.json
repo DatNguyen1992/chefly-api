@@ -12,10 +12,33 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
+    "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@shared/*": [
+        "src/shared/*"
+      ],
+      "@auth/*": [
+        "src/auth/*"
+      ],
+      "@iap/*": [
+        "src/iap/*"
+      ],
+      "@users/*": [
+        "src/users/*"
+      ],
+      "@common/*": [
+        "src/common/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ]
+    },
+    "inlineSources": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true
   }
 }

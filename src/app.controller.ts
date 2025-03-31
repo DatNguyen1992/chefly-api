@@ -7,7 +7,7 @@ export class AppController {
   constructor(@InjectConnection() private readonly connection: Connection) {}
 
   @Get()
-  async testConnection() {
+  testConnection() {
     try {
       const isConnected = this.connection.readyState === 1;
       if (isConnected) {
