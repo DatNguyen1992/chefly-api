@@ -21,7 +21,13 @@ exports.AppModule = AppModule = __decorate([
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
             }),
-            mongoose_1.MongooseModule.forRoot(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@atlascluster.ercyohu.mongodb.net/mydatabase?retryWrites=true&w=majority`),
+            mongoose_1.MongooseModule.forRootAsync({
+                useFactory: () => {
+                    const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@atlascluster.ercyohu.mongodb.net/mydatabase?retryWrites=true&w=majority`;
+                    console.log('MongoDB Connection URI:', uri);
+                    return { uri };
+                },
+            }),
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
