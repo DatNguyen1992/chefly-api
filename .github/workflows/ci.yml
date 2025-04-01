@@ -10,6 +10,9 @@ on:
       - main
       - develop
 
+env:
+  NODE_VERSION: '18.x' # Define globally for consistency
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -22,22 +25,34 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm' # Cache dependencies for faster builds
 
       # Step 3: Install dependencies
       - name: Install Dependencies
-        run: npm install
+        run: npm ci # Use npm ci for CI environments (faster, deterministic)
 
-      # Step 4: Build the project
+      # Step 4: Lint the code
+      - name: Lint Code
+        run: npm run lint
+
+      # Step 5: Build the project
       - name: Build Project
         run: npm run build
 
-      # Step 5: Run tests
-      - name: Run Tests
+      # Step 6: Run unit tests
+      - name: Run Unit Tests
         run: npm run test
 
+      # Step 7: Run E2E tests (optional, uncomment if needed)
+      # - name: Run E2E Tests
+      #   run: npm run test:e2e
+      #   env:
+      #     DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      #     DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
   deploy-to-vercel:
-    needs: build-and-test
+    needs: build-and-test # Only deploy if tests pass
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' # Deploy only on push to main
     steps:
@@ -49,15 +64,30 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
-      # Step 3: Install Vercel CLI
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: npm ci
+
+      # Step 4: Build the project
+      - name: Build Project
+        run: npm run vercel-build # Use the Vercel-specific build script
+
+      # Step 5: Install Vercel CLI
       - name: Install Vercel CLI
         run: npm install -g vercel
 
-      # Step 4: Deploy to Vercel
+      # Step 6: Pull Vercel environment variables
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment production --token ${{ secrets.VERCEL_TOKEN }}
+
+      # Step 7: Deploy to Vercel
       - name: Deploy to Vercel
         run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
