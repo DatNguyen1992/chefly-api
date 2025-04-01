@@ -8,6 +8,15 @@ let cachedApp = null;
 
 async function bootstrap() {
   if (!cachedApp) {
+    // Log environment variables for debugging
+    console.log('DB_USERNAME:', process.env.DB_USERNAME);
+    console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? '[hidden]' : 'undefined');
+
+    // Throw an error if variables are missing
+    if (!process.env.DB_USERNAME || !process.env.DB_PASSWORD) {
+      throw new Error('Missing DB_USERNAME or DB_PASSWORD environment variables');
+    }
+
     const app = await NestFactory.create(AppModule);
     app.enableCors({
       origin: '*',
@@ -21,29 +30,7 @@ async function bootstrap() {
   return cachedApp;
 }
 
-export const handler = async (event: any, context: any) => {
+export default async (req: any, res: any) => {
   const app = await bootstrap();
-  return new Promise((resolve, reject) => {
-    const req = event; // Adapt event to req/res if using API Gateway
-    const res = {
-      statusCode: 200,
-      headers: {},
-      body: '',
-      end: function () {
-        resolve({
-          statusCode: this.statusCode,
-          headers: this.headers,
-          body: this.body,
-        });
-      },
-      writeHead: function (statusCode, headers) {
-        this.statusCode = statusCode;
-        this.headers = headers;
-      },
-      write: function (data) {
-        this.body += data;
-      },
-    };
-    app(req, res);
-  });
+  return app(req, res);
 };
