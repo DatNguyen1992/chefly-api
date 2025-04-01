@@ -9,9 +9,13 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(
-      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@atlascluster.ercyohu.mongodb.net/mydatabase?retryWrites=true&w=majority`,
-    ),
+    MongooseModule.forRootAsync({
+      useFactory: () => {
+        const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@atlascluster.ercyohu.mongodb.net/mydatabase?retryWrites=true&w=majority`;
+        console.log('MongoDB Connection URI:', uri); // Ghi log chuỗi kết nối
+        return { uri };
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
