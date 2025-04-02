@@ -23,7 +23,7 @@ import configuration from '@config/configuration';
     }),
     RedisModule,
     AuthModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

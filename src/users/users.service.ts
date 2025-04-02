@@ -27,7 +27,7 @@ export class UsersService extends BaseRepository<User> {
     const user = await this.userModel.find({
       $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
     });
-console.log('user ', user)
+    console.log('user ', user);
     if (!user) {
       return null;
     }

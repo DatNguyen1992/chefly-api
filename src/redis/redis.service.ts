@@ -19,9 +19,11 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     const redisConfig = {
       host: 'eminent-moose-52503.upstash.io',
       port: 6379,
-      password: this.configService.get('redis.password') || 'your-password-here', // Replace with actual password or use environment variable
+      password:
+        this.configService.get('redis.password') || 'your-password-here', // Replace with actual password or use environment variable
       tls: {},
-      maxRetriesPerRequest: this.configService.get('redis.maxRetriesPerRequest') || 3,
+      maxRetriesPerRequest:
+        this.configService.get('redis.maxRetriesPerRequest') || 3,
       retryStrategy: (times: number) => {
         // Retry strategy: wait 1 second, up to 3 attempts
         return Math.min(times * 1000, 3000);

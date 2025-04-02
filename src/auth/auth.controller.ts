@@ -5,7 +5,6 @@ import {
   UseGuards,
   Get,
   Req,
-  HttpCode,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
