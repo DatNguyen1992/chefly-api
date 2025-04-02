@@ -14,6 +14,7 @@ import { JwtRefreshGuard } from './guards/jwt-refresh.auth';
 import { GetUser } from '@common/decorators/get-user.decorator';
 import { User } from '@users/schemas/user.schema';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { AdminAuthDto } from './dto/admin-auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -32,6 +33,14 @@ export class AuthController {
       socialAuthDto.provider,
       socialAuthDto.token,
     );
+  }
+
+  @Post('admin/login')
+  @ApiOperation({
+    summary: 'Login with admin credentials',
+  })
+  async adminLogin(@Body() adminAuthDto: AdminAuthDto) {
+    return this.socialAuthService.validateAdminLogin(adminAuthDto);
   }
 
   @Get('google/callback')

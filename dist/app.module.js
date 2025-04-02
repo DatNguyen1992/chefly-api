@@ -38,13 +38,12 @@ exports.AppModule = AppModule = __decorate([
             mongoose_1.MongooseModule.forRootAsync({
                 useFactory: () => {
                     const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@atlascluster.ercyohu.mongodb.net/${process.env.DATABASE}?retryWrites=true&w=majority`;
-                    console.log('MongoDB Connection URI:', uri);
                     return { uri };
                 },
             }),
             redis_module_1.RedisModule,
             auth_module_1.AuthModule,
-            users_module_1.UsersModule
+            users_module_1.UsersModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

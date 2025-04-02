@@ -24,6 +24,7 @@ const jwt_refresh_auth_1 = require("./guards/jwt-refresh.auth");
 const get_user_decorator_1 = require("../common/decorators/get-user.decorator");
 const user_schema_1 = require("../users/schemas/user.schema");
 const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
+const admin_auth_dto_1 = require("./dto/admin-auth.dto");
 let AuthController = class AuthController {
     constructor(authService, socialAuthService) {
         this.authService = authService;
@@ -31,6 +32,9 @@ let AuthController = class AuthController {
     }
     async socialLogin(socialAuthDto) {
         return this.socialAuthService.validateSocialLogin(socialAuthDto.provider, socialAuthDto.token);
+    }
+    async adminLogin(adminAuthDto) {
+        return this.socialAuthService.validateAdminLogin(adminAuthDto);
     }
     async googleAuthCallback(req) {
         return this.authService.handleOAuthLogin(req.user);
@@ -54,6 +58,16 @@ __decorate([
     __metadata("design:paramtypes", [social_auth_dto_1.SocialAuthDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "socialLogin", null);
+__decorate([
+    (0, common_1.Post)('admin/login'),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Login with admin credentials',
+    }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [admin_auth_dto_1.AdminAuthDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "adminLogin", null);
 __decorate([
     (0, common_1.Get)('google/callback'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('google')),

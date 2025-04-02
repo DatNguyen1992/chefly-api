@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { User } from '@users/schemas/user.schema';
 import { SocialProvider } from './dto/social-auth.dto';
 import { UsersService } from '@users/users.service';
+import { AdminAuthDto } from './dto/admin-auth.dto';
 
 @Injectable()
 export class SocialAuthService {
@@ -48,6 +49,19 @@ export class SocialAuthService {
         provider,
         providerId: socialUser.id || socialUser.sub,
       });
+    }
+    // Generate JWT tokens
+    return this.authService.generateTokens(user);
+  }
+
+  async validateAdminLogin(adminAuthDto: AdminAuthDto) {
+    // Find existing user or create new one
+    const user: User = await this.userModel.findOne({
+      email: adminAuthDto.email,
+      password: adminAuthDto.password,
+    });
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
     }
     // Generate JWT tokens
     return this.authService.generateTokens(user);

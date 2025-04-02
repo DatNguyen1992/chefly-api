@@ -38,7 +38,6 @@ let UsersService = class UsersService extends base_repository_1.BaseRepository {
         const user = await this.userModel.find({
             $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
         });
-        console.log('user ', user);
         if (!user) {
             return null;
         }
