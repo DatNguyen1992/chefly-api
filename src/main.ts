@@ -2,8 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module'; // Ensure this path is correct
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import dotenv from 'dotenv';
-import { Logger } from '@nestjs/common';
-import { RedisService } from './redis/redis.service';
 
 // Load environment variables
 const dotenvResult = dotenv.config();
@@ -37,7 +35,6 @@ async function bootstrap() {
 
     // Create the NestJS app
     const app = await NestFactory.create(AppModule);
-    const logger = new Logger('Bootstrap');
 
     // Enable CORS for serverless compatibility
     app.enableCors({
