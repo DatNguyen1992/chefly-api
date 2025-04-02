@@ -1,4 +1,4 @@
-name: CI/CD for Chefly API
+name: CI for Chefly API
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
 
 env:
   NODE_VERSION: '18.x'
-  
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -39,58 +39,3 @@ jobs:
       # Step 5: Build the project
       - name: Build Project
         run: npm run build
-
-      # Step 6: Run unit tests
-      - name: Run Unit Tests
-        run: npm run test
-
-  deploy-to-vercel:
-    needs: build-and-test # Only deploy if tests pass
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' # Deploy only on push to main
-    steps:
-      # Step 1: Checkout the code
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      # Step 3: Install dependencies
-      - name: Install Dependencies
-        run: npm ci
-
-      # # Step 4: Build the project
-      # - name: Vercel build
-      #   run: npm run vercel-build # Use the Vercel-specific build script
-
-      # Step 5: Install Vercel CLI
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
-      # Step 6: Pull Vercel environment variables
-      - name: Pull Vercel Environment
-        run: vercel pull --yes --environment production --token ${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build Project
-        run: npm run vercel-build
-        env:
-          VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ env.VERCEL_PROJECT_ID }}
-          DB_USERNAME: ${{ env.DB_USERNAME }}
-          DB_PASSWORD: ${{ env.DB_PASSWORD }}
-
-      - name: Deploy to Vercel
-        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
-      # Step 7: Deploy to Vercel
-      # - name: Deploy to Vercel
-      #   run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
-      #   env:
-      #     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      #     DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      #     DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
