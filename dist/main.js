@@ -8,7 +8,6 @@ const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
 const dotenv_1 = __importDefault(require("dotenv"));
 const common_1 = require("@nestjs/common");
-const redis_service_1 = require("./redis/redis.service");
 const dotenvResult = dotenv_1.default.config();
 if (dotenvResult.error) {
     console.error('Error loading .env file:', dotenvResult.error);
@@ -45,16 +44,7 @@ async function bootstrap() {
             .addBearerAuth()
             .build();
         const document = swagger_1.SwaggerModule.createDocument(app, config);
-        swagger_1.SwaggerModule.setup('api/docs', app, document);
-        const redisService = app.get(redis_service_1.RedisService);
-        try {
-            await redisService.getClient().ping();
-            logger.log('Successfully connected to Redis via Upstash');
-        }
-        catch (error) {
-            logger.error('Failed to connect to Redis:', error);
-            throw error;
-        }
+        swagger_1.SwaggerModule.setup('api', app, document);
         await app.init();
         cachedApp = app.getHttpAdapter().getInstance();
     }
