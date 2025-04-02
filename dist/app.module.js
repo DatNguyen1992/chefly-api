@@ -38,7 +38,6 @@ exports.AppModule = AppModule = __decorate([
             mongoose_1.MongooseModule.forRootAsync({
                 useFactory: () => {
                     const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@atlascluster.ercyohu.mongodb.net/${process.env.DATABASE}?retryWrites=true&w=majority`;
-                    console.log('MongoDB Connection URI:', uri);
                     return { uri };
                 },
             }),
