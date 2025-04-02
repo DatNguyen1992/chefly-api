@@ -56,6 +56,16 @@ let SocialAuthService = class SocialAuthService {
         }
         return this.authService.generateTokens(user);
     }
+    async validateAdminLogin(adminAuthDto) {
+        let user = await this.userModel.findOne({
+            email: adminAuthDto.email,
+            password: adminAuthDto.password,
+        });
+        if (!user) {
+            throw new common_1.UnauthorizedException('Invalid email or password');
+        }
+        return this.authService.generateTokens(user);
+    }
     async verifyGoogleToken(token) {
         try {
             const ticket = await this.googleClient.verifyIdToken({
