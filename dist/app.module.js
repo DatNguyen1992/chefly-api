@@ -44,7 +44,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             redis_module_1.RedisModule,
             auth_module_1.AuthModule,
-            users_module_1.UsersModule
+            users_module_1.UsersModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

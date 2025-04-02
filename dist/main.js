@@ -1,66 +1,75 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
-const dotenv = __importStar(require("dotenv"));
 const swagger_1 = require("@nestjs/swagger");
-const dotenvResult = dotenv.config();
+const dotenv_1 = __importDefault(require("dotenv"));
+const common_1 = require("@nestjs/common");
+const redis_service_1 = require("./redis/redis.service");
+const dotenvResult = dotenv_1.default.config();
 if (dotenvResult.error) {
     console.error('Error loading .env file:', dotenvResult.error);
 }
 else {
     console.log('Environment variables loaded successfully');
 }
+let cachedApp = null;
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    app.setGlobalPrefix('api');
-    app.enableCors({
-        origin: '*',
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        allowedHeaders: 'Content-Type, Accept, Authorization',
-    });
-    const config = new swagger_1.DocumentBuilder()
-        .setTitle('CHEFLY API')
-        .setDescription('Authentication and User Management API')
-        .setVersion('1.0')
-        .addBearerAuth()
-        .build();
-    const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup('api', app, document);
-    await app.listen(3000);
+    if (!cachedApp) {
+        const requiredEnvVars = [
+            'DB_USERNAME',
+            'DB_PASSWORD',
+            'REDIS_HOST',
+            'REDIS_PORT',
+            'REDIS_PASSWORD',
+        ];
+        const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar]);
+        if (missingEnvVars.length > 0) {
+            throw new Error(`Missing environment variables: ${missingEnvVars.join(', ')}`);
+        }
+        const app = await core_1.NestFactory.create(app_module_1.AppModule);
+        const logger = new common_1.Logger('Bootstrap');
+        app.enableCors({
+            origin: '*',
+            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+            allowedHeaders: 'Content-Type, Accept, Authorization',
+        });
+        app.setGlobalPrefix('api');
+        const config = new swagger_1.DocumentBuilder()
+            .setTitle('CHEFLY API')
+            .setDescription('Authentication and User Management API')
+            .setVersion('1.0')
+            .addBearerAuth()
+            .build();
+        const document = swagger_1.SwaggerModule.createDocument(app, config);
+        swagger_1.SwaggerModule.setup('api/docs', app, document);
+        const redisService = app.get(redis_service_1.RedisService);
+        try {
+            await redisService.getClient().ping();
+            logger.log('Successfully connected to Redis via Upstash');
+        }
+        catch (error) {
+            logger.error('Failed to connect to Redis:', error);
+            throw error;
+        }
+        await app.init();
+        cachedApp = app.getHttpAdapter().getInstance();
+    }
+    return cachedApp;
 }
-bootstrap();
+exports.default = async (req, res) => {
+    try {
+        const app = await bootstrap();
+        return app(req, res);
+    }
+    catch (error) {
+        console.error('Error in serverless handler:', error);
+        res
+            .status(500)
+            .json({ message: 'Internal Server Error', error: error.message });
+    }
+};
 //# sourceMappingURL=main.js.map
