@@ -1,0 +1,1 @@
+{"version":3,"file":"access-token.interface.js","sourceRoot":"","sources":["../../../src/shared/interfaces/access-token.interface.ts"],"names":[],"mappings":";;;AAAA,MAAa,KAAK;CAIjB;AAJD,sBAIC","sourcesContent":["export class Token {\n  readonly token: string;\n  readonly user_id: string;\n  readonly refresh_token: string;\n}\n"]}
