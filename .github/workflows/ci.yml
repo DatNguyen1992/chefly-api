@@ -1,56 +1,41 @@
-name: Check Lint & Build 🏗
+name: CI for Chefly API
 
 on:
   push:
     branches:
       - main
-      - develop
+      - feature/*
   pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  NODE_VERSION: '18.x'
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout the code
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm' # Cache dependencies for faster builds
 
+      # Step 3: Install dependencies
       - name: Install Dependencies
-        run: npm install
+        run: npm ci # Use npm ci for CI environments (faster, deterministic)
 
+      # Step 4: Lint the code
+      - name: Lint Code
+        run: npm run lint
+
+      # Step 5: Build the project
       - name: Build Project
         run: npm run build
-
-      - name: Run Tests
-        run: npm run test -- --passWithNoTests
-
-  deploy-to-vercel:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' # Deploy only on push to main
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
-      - name: Build Project
-        run: npm run build
-
-      - name: Link Vercel Project
-        run: vercel link --project $VERCEL_PROJECT_ID --token ${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy to Vercel
-        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

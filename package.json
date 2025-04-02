@@ -8,16 +8,17 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/main.js",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^1.4.0",
@@ -36,6 +37,7 @@
     "@types/amqplib": "^0.10.7",
     "@types/mongodb": "^4.0.6",
     "@types/mongoose": "^5.11.96",
+    "@vercel/node": "^5.1.14",
     "amqplib": "^0.10.5",
     "apple-signin-auth": "^1.7.8",
     "axios": "^1.7.9",
@@ -43,6 +45,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
     "firebase-admin": "^13.1.0",
     "globals": "^16.0.0",
     "google-auth-library": "^9.15.0",
@@ -97,7 +100,9 @@
       "ts"
     ],
     "rootDir": "src",
-    "testMatch": ["**/*.spec.ts"],
+    "testMatch": [
+      "**/*.spec.ts"
+    ],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },

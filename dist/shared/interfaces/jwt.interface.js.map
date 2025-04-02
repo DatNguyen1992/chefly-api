@@ -1,0 +1,1 @@
+{"version":3,"file":"jwt.interface.js","sourceRoot":"","sources":["../../../src/shared/interfaces/jwt.interface.ts"],"names":[],"mappings":";;;AAAA,MAAa,UAAU;CAGtB;AAHD,gCAGC;AACD,MAAa,iBAAiB;CAE7B;AAFD,8CAEC","sourcesContent":["export class JwtPayload {\n  sub: string;\n  type?: string;\n}\nexport class JwtTokenDecrypted {\n  sub: string;\n}\n"]}
