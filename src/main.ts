@@ -57,17 +57,7 @@ async function bootstrap() {
       .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api/docs', app, document); // Changed to 'api/docs' to avoid conflict with API routes
-
-    // Initialize Redis connection
-    const redisService = app.get(RedisService);
-    try {
-      await redisService.getClient().ping(); // Test Redis connection
-      logger.log('Successfully connected to Redis via Upstash');
-    } catch (error) {
-      logger.error('Failed to connect to Redis:', error);
-      throw error; // Fail the bootstrap if Redis is critical
-    }
+    SwaggerModule.setup('api/docs', app, document);
 
     // Initialize the app for serverless
     await app.init();
