@@ -20,6 +20,7 @@ const get_user_decorator_1 = require("../common/decorators/get-user.decorator");
 const users_service_1 = require("./users.service");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const user_schema_1 = require("./schemas/user.schema");
+const query_user_dto_1 = require("./dto/query-user.dto");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -27,8 +28,8 @@ let UsersController = class UsersController {
     getProfile(user) {
         return user;
     }
-    getAll() {
-        return this.usersService.findAllUser();
+    getPage(query) {
+        return this.usersService.findUserPage(query);
     }
     update(id, updateUserDto) {
         return this.usersService.update(id, updateUserDto);
@@ -47,12 +48,13 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getProfile", null);
 __decorate([
-    (0, common_1.Get)('all'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get current user profile' }),
+    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get list user profile' }),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [query_user_dto_1.QueryUserDto]),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "getAll", null);
+], UsersController.prototype, "getPage", null);
 __decorate([
     (0, common_1.Patch)('profile'),
     (0, swagger_1.ApiOperation)({ summary: 'Update current user profile' }),

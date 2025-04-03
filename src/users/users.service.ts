@@ -5,6 +5,9 @@ import { User } from './schemas/user.schema';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BaseRepository } from '@shared/repositories/base.repository';
 import { getCurrentDate } from '@common/utils/date.utils';
+import { QueryUserDto } from './dto/query-user.dto';
+import { DataFilter, PaginationData } from '@shared/interfaces/data.interface';
+import { UserActive } from './enums/user-active.enum';
 @Injectable()
 export class UsersService extends BaseRepository<User> {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {
@@ -23,15 +26,29 @@ export class UsersService extends BaseRepository<User> {
     return user;
   }
 
-  async findAllUser(): Promise<User[]> {
-    const user = await this.userModel.find({
-      $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
-    });
-    console.log('user ', user);
-    if (!user) {
-      return null;
+  async findUserPage(query: QueryUserDto): Promise<PaginationData<User>> {
+    const dataFilter = new DataFilter<User>();
+    if (query?.limit) {
+      dataFilter.limit = query?.limit;
     }
-    return user;
+    if (query?.page) {
+      dataFilter.page = query?.page;
+    }
+
+    dataFilter.condition = {
+      ...(query?.active &&
+        query?.active === UserActive.ACTIVE && { deletedAt: null }),
+      ...(query?.active &&
+        query?.active === UserActive.INACTIVE && {
+          deletedAt: { $ne: null },
+        }),
+      ...(query?.search && {
+        name: { $regex: query?.search, $options: 'i' },
+      }),
+    };
+
+    dataFilter.selectCols = ['-password'];
+    return this.findPage(dataFilter);
   }
 
   async create(entities: Partial<User>): Promise<User> {

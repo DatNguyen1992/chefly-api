@@ -14,6 +14,7 @@ if (dotenvResult.error) {
 else {
     console.log('Environment variables loaded successfully');
 }
+let cachedApp = null;
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.setGlobalPrefix('api');
