@@ -5,6 +5,7 @@ import {
   Delete,
   UseGuards,
   Body,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -12,6 +13,7 @@ import { GetUser } from '../common/decorators/get-user.decorator';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
+import { QueryUserDto } from './dto/query-user.dto';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -25,10 +27,11 @@ export class UsersController {
   getProfile(@GetUser() user: User) {
     return user;
   }
-  @Get('all')
-  @ApiOperation({ summary: 'Get current user profile' })
-  getAll() {
-    return this.usersService.findAllUser();
+
+  @Get()
+  @ApiOperation({ summary: 'Get list user profile' })
+  getPage(@Query() query: QueryUserDto) {
+    return this.usersService.findUserPage(query);
   }
 
   @Patch('profile')

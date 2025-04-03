@@ -19,6 +19,8 @@ const mongoose_2 = require("mongoose");
 const user_schema_1 = require("./schemas/user.schema");
 const base_repository_1 = require("../shared/repositories/base.repository");
 const date_utils_1 = require("../common/utils/date.utils");
+const data_interface_1 = require("../shared/interfaces/data.interface");
+const user_active_enum_1 = require("./enums/user-active.enum");
 let UsersService = class UsersService extends base_repository_1.BaseRepository {
     constructor(userModel) {
         super(userModel);
@@ -34,14 +36,27 @@ let UsersService = class UsersService extends base_repository_1.BaseRepository {
         }
         return user;
     }
-    async findAllUser() {
-        const user = await this.userModel.find({
-            $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
-        });
-        if (!user) {
-            return null;
+    async findUserPage(query) {
+        const dataFilter = new data_interface_1.DataFilter();
+        if (query?.limit) {
+            dataFilter.limit = query?.limit;
         }
-        return user;
+        if (query?.page) {
+            dataFilter.page = query?.page;
+        }
+        dataFilter.condition = {
+            ...(query?.active &&
+                query?.active === user_active_enum_1.UserActive.ACTIVE && { deletedAt: null }),
+            ...(query?.active &&
+                query?.active === user_active_enum_1.UserActive.INACTIVE && {
+                deletedAt: { $ne: null },
+            }),
+            ...(query?.search && {
+                name: { $regex: query?.search, $options: 'i' },
+            }),
+        };
+        dataFilter.selectCols = ['-password'];
+        return this.findPage(dataFilter);
     }
     async create(entities) {
         const user = await this.userModel.create(entities);

@@ -57,7 +57,7 @@ let SocialAuthService = class SocialAuthService {
         return this.authService.generateTokens(user);
     }
     async validateAdminLogin(adminAuthDto) {
-        let user = await this.userModel.findOne({
+        const user = await this.userModel.findOne({
             email: adminAuthDto.email,
             password: adminAuthDto.password,
         });

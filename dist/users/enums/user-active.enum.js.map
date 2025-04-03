@@ -1,0 +1,1 @@
+{"version":3,"file":"user-active.enum.js","sourceRoot":"","sources":["../../../src/users/enums/user-active.enum.ts"],"names":[],"mappings":";;;AAAA,IAAY,UAGX;AAHD,WAAY,UAAU;IAClB,+BAAiB,CAAA;IACjB,mCAAqB,CAAA;AACzB,CAAC,EAHW,UAAU,0BAAV,UAAU,QAGrB","sourcesContent":["export enum UserActive {\r\n    ACTIVE = 'active',\r\n    INACTIVE = 'inactive',\r\n}"]}
