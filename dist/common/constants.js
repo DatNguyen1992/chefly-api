@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LIMIT_DAYS_IN_TRASH = exports.MAX_FILES_UPLOAD = exports.MAX_SIZE_UPLOAD_IMAGE_APP = exports.ERROR_CODE = exports.LIMIT_FREE = exports.PIN_CODE_PATTERN = exports.OBJECT_ID_PATTERN = exports.RETRY_DELAY = exports.MAX_RETRIES_QUEUE = exports.FCM_UNREGISTERED_ERROR_CODE = exports.FCM_INVALID_ARGUMENT_ERROR_CODE = void 0;
+exports.TagType = exports.LIMIT_DAYS_IN_TRASH = exports.MAX_FILES_UPLOAD = exports.MAX_SIZE_UPLOAD_IMAGE_APP = exports.ERROR_CODE = exports.LIMIT_FREE = exports.PIN_CODE_PATTERN = exports.OBJECT_ID_PATTERN = exports.RETRY_DELAY = exports.MAX_RETRIES_QUEUE = exports.FCM_UNREGISTERED_ERROR_CODE = exports.FCM_INVALID_ARGUMENT_ERROR_CODE = void 0;
 exports.FCM_INVALID_ARGUMENT_ERROR_CODE = 'messaging/invalid-argument';
 exports.FCM_UNREGISTERED_ERROR_CODE = 'messaging/registration-token-not-registered';
 exports.MAX_RETRIES_QUEUE = 4;
@@ -26,4 +26,9 @@ exports.ERROR_CODE = {
 exports.MAX_SIZE_UPLOAD_IMAGE_APP = 100 * 1024 * 1024;
 exports.MAX_FILES_UPLOAD = 5;
 exports.LIMIT_DAYS_IN_TRASH = 30;
+exports.TagType = {
+    MATERIAL: 'MATERIAL',
+    CUISINE: 'CUISINE',
+    DIETARY: 'DIETARY',
+};
 //# sourceMappingURL=constants.js.map

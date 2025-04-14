@@ -9,11 +9,6 @@ export declare class User extends BaseSchema {
     pinCode?: string;
     avatar?: string;
     refreshToken?: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date;
-    curPlanType?: string;
-    curPlanStatus?: string;
 }
 export declare const UserSchema: import("mongoose").Schema<User, import("mongoose").Model<User, any, any, any, import("mongoose").Document<unknown, any, User> & User & Required<{
     _id: unknown;

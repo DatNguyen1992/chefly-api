@@ -22,9 +22,13 @@ __decorate([
     __metadata("design:type", Date)
 ], BaseSchema.prototype, "createdAt", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: Date.now }),
+    (0, mongoose_1.Prop)({ default: null }),
     __metadata("design:type", Date)
 ], BaseSchema.prototype, "updatedAt", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", Date)
+], BaseSchema.prototype, "deletedAt", void 0);
 exports.BaseSchema = BaseSchema = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], BaseSchema);

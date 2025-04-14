@@ -31,21 +31,6 @@ export class User extends BaseSchema {
 
   @Prop()
   refreshToken?: string;
-
-  @Prop({ default: Date.now })
-  createdAt: Date;
-
-  @Prop({ default: Date.now })
-  updatedAt: Date;
-
-  @Prop({ default: null })
-  deletedAt: Date;
-
-  @Prop()
-  curPlanType?: string;
-
-  @Prop()
-  curPlanStatus?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

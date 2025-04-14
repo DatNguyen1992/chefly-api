@@ -25,3 +25,9 @@ export const ERROR_CODE = {
 export const MAX_SIZE_UPLOAD_IMAGE_APP = 100 * 1024 * 1024; // 100mb
 export const MAX_FILES_UPLOAD = 5;
 export const LIMIT_DAYS_IN_TRASH = 30;
+
+export const TagType = {
+  MATERIAL: 'MATERIAL',
+  CUISINE: 'CUISINE',
+  DIETARY: 'DIETARY',
+};
