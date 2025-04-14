@@ -54,29 +54,29 @@ export class EmailController {
       }
 
       // Tạm thời bỏ qua xác minh chữ ký khi test
-    //   const isTestMode = process.env.NODE_ENV === 'development'; // Chỉ áp dụng trong dev
-    //   if (!isTestMode) {
-    //     if (
-    //       !body.signature ||
-    //       !body.signature.timestamp ||
-    //       !body.signature.token ||
-    //       !body.signature.signature
-    //     ) {
-    //       throw new BadRequestException('Missing or invalid signature');
-    //     }
+      //   const isTestMode = process.env.NODE_ENV === 'development'; // Chỉ áp dụng trong dev
+      //   if (!isTestMode) {
+      //     if (
+      //       !body.signature ||
+      //       !body.signature.timestamp ||
+      //       !body.signature.token ||
+      //       !body.signature.signature
+      //     ) {
+      //       throw new BadRequestException('Missing or invalid signature');
+      //     }
 
-    //     const apiKey = this.configService.get<string>('MAILGUN_API_KEY');
-    //     const { timestamp, token, signature } = body.signature;
-    //     const data = `${timestamp}${token}`;
-    //     const hmac = crypto
-    //       .createHmac('sha256', apiKey)
-    //       .update(data)
-    //       .digest('hex');
+      //     const apiKey = this.configService.get<string>('MAILGUN_API_KEY');
+      //     const { timestamp, token, signature } = body.signature;
+      //     const data = `${timestamp}${token}`;
+      //     const hmac = crypto
+      //       .createHmac('sha256', apiKey)
+      //       .update(data)
+      //       .digest('hex');
 
-    //     if (hmac !== signature) {
-    //       throw new BadRequestException('Invalid webhook signature');
-    //     }
-    //   }
+      //     if (hmac !== signature) {
+      //       throw new BadRequestException('Invalid webhook signature');
+      //     }
+      //   }
 
       // Payload từ Test Webhook có thể không đủ trường, dùng giá trị mặc định
       const {
@@ -85,7 +85,6 @@ export class EmailController {
         subject = 'Test Subject',
         'stripped-text': textContent = 'Test Content',
         'body-html': htmlContent,
-
       } = body;
 
       await this.emailService.receiveEmail(recipient, {
