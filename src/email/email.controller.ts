@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { ApiTags } from '@nestjs/swagger';
-import * as crypto from 'crypto';
 
 @ApiTags('email')
 @Controller('email')
