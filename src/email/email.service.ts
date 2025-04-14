@@ -11,13 +11,13 @@ export class EmailService {
   constructor(@InjectModel(Email.name) private tempEmailModel: Model<Email>) {
     this.mg = Mailgun({
       apiKey: '943400ecf659fd87022197efa4bd1a24-17c877d7-a972715e',
-      domain: 'diaty.com',
+      domain: 'sandbox1640064e04114303ac6dbb770cb34e1a.mailgun.org',
     });
   }
 
   async generateEmail(): Promise<string> {
     const randomId = Math.random().toString(36).substring(2, 10);
-    const email = `${randomId}@diaty.com`;
+    const email = `${randomId}@sandbox1640064e04114303ac6dbb770cb34e1a.mailgun.org`;
     const newEmail = new this.tempEmailModel({ email, messages: [] });
     await newEmail.save();
     return email;
@@ -46,7 +46,12 @@ export class EmailService {
 
   async receiveEmail(
     email: string,
-    message: { from: string; subject: string; content: string },
+    message: {
+      from: string;
+      subject: string;
+      content: string;
+      isHtml?: boolean;
+    },
   ) {
     await this.tempEmailModel.updateOne(
       { email },
