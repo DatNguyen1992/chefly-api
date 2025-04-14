@@ -23,3 +23,8 @@ export declare const ERROR_CODE: {
 export declare const MAX_SIZE_UPLOAD_IMAGE_APP: number;
 export declare const MAX_FILES_UPLOAD = 5;
 export declare const LIMIT_DAYS_IN_TRASH = 30;
+export declare const TagType: {
+    MATERIAL: string;
+    CUISINE: string;
+    DIETARY: string;
+};

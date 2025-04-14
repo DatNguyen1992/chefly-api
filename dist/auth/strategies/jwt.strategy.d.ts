@@ -17,10 +17,8 @@ export declare class JwtStrategy extends JwtStrategy_base {
         avatar?: string;
         refreshToken?: string;
         createdAt: Date;
-        updatedAt: Date;
-        deletedAt: Date;
-        curPlanType?: string;
-        curPlanStatus?: string;
+        updatedAt?: Date;
+        deletedAt?: Date;
         _id: unknown;
         $locals: Record<string, unknown>;
         $op: "save" | "validate" | "remove" | null;

@@ -8,8 +8,11 @@ export class BaseSchema extends Document {
   @Prop({ default: Date.now })
   createdAt: Date;
 
-  @Prop({ default: Date.now })
-  updatedAt: Date;
+  @Prop({ default: null })
+  updatedAt?: Date;
+
+  @Prop({ default: null })
+  deletedAt?: Date;
 }
 
 export const BaseEntitySchema = SchemaFactory.createForClass(BaseSchema);
