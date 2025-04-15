@@ -66,6 +66,26 @@ let SocialAuthService = class SocialAuthService {
         }
         return this.authService.generateTokens(user);
     }
+    async validateLogin(loginDto) {
+        const user = await this.userModel.findOne({
+            token: loginDto.token,
+        });
+        let JWTtoken;
+        if (!user) {
+            const newUser = await this.userModel.create({
+                name: 'New user',
+                token: loginDto.token,
+                email: '',
+                password: '',
+                avatar: '',
+            });
+            JWTtoken = await this.authService.generateTokens(newUser);
+        }
+        else {
+            JWTtoken = await this.authService.generateTokens(user);
+        }
+        return JWTtoken;
+    }
     async verifyGoogleToken(token) {
         try {
             const ticket = await this.googleClient.verifyIdToken({

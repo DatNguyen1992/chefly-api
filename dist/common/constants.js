@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TagType = exports.LIMIT_DAYS_IN_TRASH = exports.MAX_FILES_UPLOAD = exports.MAX_SIZE_UPLOAD_IMAGE_APP = exports.ERROR_CODE = exports.LIMIT_FREE = exports.PIN_CODE_PATTERN = exports.OBJECT_ID_PATTERN = exports.RETRY_DELAY = exports.MAX_RETRIES_QUEUE = exports.FCM_UNREGISTERED_ERROR_CODE = exports.FCM_INVALID_ARGUMENT_ERROR_CODE = void 0;
+exports.SortType = exports.QRType = exports.TagType = exports.LIMIT_DAYS_IN_TRASH = exports.MAX_FILES_UPLOAD = exports.MAX_SIZE_UPLOAD_IMAGE_APP = exports.ERROR_CODE = exports.LIMIT_FREE = exports.PIN_CODE_PATTERN = exports.OBJECT_ID_PATTERN = exports.RETRY_DELAY = exports.MAX_RETRIES_QUEUE = exports.FCM_UNREGISTERED_ERROR_CODE = exports.FCM_INVALID_ARGUMENT_ERROR_CODE = void 0;
 exports.FCM_INVALID_ARGUMENT_ERROR_CODE = 'messaging/invalid-argument';
 exports.FCM_UNREGISTERED_ERROR_CODE = 'messaging/registration-token-not-registered';
 exports.MAX_RETRIES_QUEUE = 4;
@@ -31,4 +31,17 @@ exports.TagType = {
     CUISINE: 'CUISINE',
     DIETARY: 'DIETARY',
 };
+var QRType;
+(function (QRType) {
+    QRType["URL"] = "URL";
+    QRType["PHONE"] = "PHONE";
+    QRType["APPSTORE"] = "APPSTORE";
+    QRType["CHPLAY"] = "CHPLAY";
+    QRType["TEXT"] = "TEXT";
+})(QRType || (exports.QRType = QRType = {}));
+var SortType;
+(function (SortType) {
+    SortType["ASC"] = "ASC";
+    SortType["DESC"] = "DESC";
+})(SortType || (exports.SortType = SortType = {}));
 //# sourceMappingURL=constants.js.map

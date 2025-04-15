@@ -20,6 +20,8 @@ let EmailGateway = class EmailGateway {
         this.emailService = emailService;
     }
     async handleWatchEmail(email) {
+        console.log('email ', email);
+        return email;
     }
 };
 exports.EmailGateway = EmailGateway;

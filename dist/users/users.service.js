@@ -36,6 +36,15 @@ let UsersService = class UsersService extends base_repository_1.BaseRepository {
         }
         return user;
     }
+    async findByToken(token) {
+        const user = await this.userModel.findOne({
+            token,
+        });
+        if (!user) {
+            return null;
+        }
+        return user;
+    }
     async findUserPage(query) {
         const dataFilter = new data_interface_1.DataFilter();
         if (query?.limit) {

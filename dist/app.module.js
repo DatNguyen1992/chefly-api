@@ -22,6 +22,8 @@ const redis_module_1 = require("./redis/redis.module");
 const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const email_module_1 = require("./email/email.module");
+const upload_module_1 = require("./upload/upload.module");
+const history_module_1 = require("./history/history.module");
 const configuration_1 = __importDefault(require("./config/configuration"));
 let AppModule = class AppModule {
     constructor() {
@@ -47,6 +49,8 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
             email_module_1.EmailModule,
+            upload_module_1.UploadModule,
+            history_module_1.HistoryModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

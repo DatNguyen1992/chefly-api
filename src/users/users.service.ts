@@ -26,6 +26,17 @@ export class UsersService extends BaseRepository<User> {
     return user;
   }
 
+  async findByToken(token: string): Promise<User> {
+    const user = await this.userModel.findOne({
+      token,
+    });
+
+    if (!user) {
+      return null;
+    }
+    return user;
+  }
+
   async findUserPage(query: QueryUserDto): Promise<PaginationData<User>> {
     const dataFilter = new DataFilter<User>();
     if (query?.limit) {
