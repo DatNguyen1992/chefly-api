@@ -1,7 +1,7 @@
 import { QRType, SortType } from '@common/constants';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { BaseQuery } from '@shared/interfaces/base-query.interface';
-import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
 
 export class QueryHistoryDto extends BaseQuery {
   @ApiPropertyOptional({ enum: QRType })

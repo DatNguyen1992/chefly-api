@@ -16,12 +16,15 @@ export class UploadService {
   async uploadFile(file: Express.Multer.File): Promise<string> {
     return new Promise((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ resource_type: 'image' }, (error: Error, result: UploadApiResponse) => {
-          if (error) {
-            return reject(error);
-          }
-          resolve(result.secure_url);
-        })
+        .upload_stream(
+          { resource_type: 'image' },
+          (error: Error, result: UploadApiResponse) => {
+            if (error) {
+              return reject(error);
+            }
+            resolve(result.secure_url);
+          },
+        )
         .end(file.buffer);
     });
   }
