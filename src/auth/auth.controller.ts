@@ -15,6 +15,7 @@ import { GetUser } from '@common/decorators/get-user.decorator';
 import { User } from '@users/schemas/user.schema';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AdminAuthDto } from './dto/admin-auth.dto';
+import { LoginDto } from './dto/login.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -41,6 +42,14 @@ export class AuthController {
   })
   async adminLogin(@Body() adminAuthDto: AdminAuthDto) {
     return this.socialAuthService.validateAdminLogin(adminAuthDto);
+  }
+
+  @Post('login')
+  @ApiOperation({
+    summary: 'Login with admin credentials',
+  })
+  async login(@Body() loginDto: LoginDto) {
+    return this.socialAuthService.validateLogin(loginDto);
   }
 
   @Get('google/callback')

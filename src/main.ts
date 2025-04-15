@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import dotenv from 'dotenv';
+import { ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
+import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 
 const dotenvResult = dotenv.config();
 if (dotenvResult.error) {
@@ -33,6 +36,15 @@ async function bootstrap() {
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       allowedHeaders: 'Content-Type, Accept, Authorization',
     });
+    app.useGlobalPipes(new ValidationPipe());
+
+    // Global filters
+    app.useGlobalFilters(new HttpExceptionFilter());
+
+    // Global interceptors
+    app.useGlobalInterceptors(new TransformInterceptor());
+
+    // Global prefix
     app.setGlobalPrefix('api');
     const config = new DocumentBuilder()
       .setTitle('CHEFLY API')
@@ -61,8 +73,18 @@ export default async (req: any, res: any) => {
 
 // async function bootstrap() {
 //   const app = await NestFactory.create(AppModule);
-//   // Global prefix
-//   app.setGlobalPrefix('api');
+//    // Global pipes
+//    app.useGlobalPipes(new ValidationPipe());
+
+//    // Global filters
+//    app.useGlobalFilters(new HttpExceptionFilter());
+
+//    // Global interceptors
+//    app.useGlobalInterceptors(new TransformInterceptor());
+
+//    // Global prefix
+//    app.setGlobalPrefix('api');
+
 //   app.enableCors({
 //     origin: '*',
 //     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

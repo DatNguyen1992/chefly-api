@@ -8,6 +8,7 @@ export declare class UsersService extends BaseRepository<User> {
     private userModel;
     constructor(userModel: Model<User>);
     findByEmail(email: string): Promise<User>;
+    findByToken(token: string): Promise<User>;
     findUserPage(query: QueryUserDto): Promise<PaginationData<User>>;
     create(entities: Partial<User>): Promise<User>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<User>;

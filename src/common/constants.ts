@@ -31,3 +31,16 @@ export const TagType = {
   CUISINE: 'CUISINE',
   DIETARY: 'DIETARY',
 };
+
+export enum QRType {
+  URL = 'URL',
+  PHONE = 'PHONE',
+  APPSTORE = 'APPSTORE',
+  CHPLAY = 'CHPLAY',
+  TEXT = 'TEXT',
+}
+
+export enum SortType {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}

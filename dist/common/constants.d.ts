@@ -28,3 +28,14 @@ export declare const TagType: {
     CUISINE: string;
     DIETARY: string;
 };
+export declare enum QRType {
+    URL = "URL",
+    PHONE = "PHONE",
+    APPSTORE = "APPSTORE",
+    CHPLAY = "CHPLAY",
+    TEXT = "TEXT"
+}
+export declare enum SortType {
+    ASC = "ASC",
+    DESC = "DESC"
+}

@@ -1,6 +1,7 @@
 import { BaseSchema } from '@shared/schemas/base.schema';
 export declare class User extends BaseSchema {
     name: string;
+    token: string;
     email?: string;
     image?: string;
     password?: string;

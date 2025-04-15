@@ -8,6 +8,9 @@ export class User extends BaseSchema {
   @Prop({ required: true })
   name: string;
 
+  @Prop({ required: true })
+  token: string;
+
   @Prop()
   email?: string;
 

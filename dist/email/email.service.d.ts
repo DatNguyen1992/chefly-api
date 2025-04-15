@@ -13,5 +13,6 @@ export declare class EmailService {
         from: string;
         subject: string;
         content: string;
+        isHtml?: boolean;
     }): Promise<void>;
 }

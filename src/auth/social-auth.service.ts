@@ -8,6 +8,7 @@ import { User } from '@users/schemas/user.schema';
 import { SocialProvider } from './dto/social-auth.dto';
 import { UsersService } from '@users/users.service';
 import { AdminAuthDto } from './dto/admin-auth.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class SocialAuthService {
@@ -65,6 +66,29 @@ export class SocialAuthService {
     }
     // Generate JWT tokens
     return this.authService.generateTokens(user);
+  }
+
+  async validateLogin(loginDto: LoginDto) {
+    // Find existing user or create new one
+    const user: User = await this.userModel.findOne({
+      token: loginDto.token,
+    });
+    let JWTtoken;
+    if (!user) {
+      // throw new UnauthorizedException('Invalid email or password');
+      const newUser = await this.userModel.create({
+        name: 'New user',
+        token: loginDto.token,
+        email: '',
+        password: '',
+        avatar: '',
+      });
+      JWTtoken = await this.authService.generateTokens(newUser);
+    } else {
+      JWTtoken = await this.authService.generateTokens(user);
+    }
+    // Generate JWT tokens
+    return JWTtoken;
   }
 
   private async verifyGoogleToken(token: string) {

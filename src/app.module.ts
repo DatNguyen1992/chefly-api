@@ -7,6 +7,8 @@ import { RedisModule } from './redis/redis.module';
 import { AuthModule } from '@auth/auth.module';
 import { UsersModule } from '@users/users.module';
 import { EmailModule } from './email/email.module';
+import { UploadModule } from './upload/upload.module';
+import { HistoryModule } from './history/history.module';
 import configuration from '@config/configuration';
 
 @Module({
@@ -26,6 +28,8 @@ import configuration from '@config/configuration';
     AuthModule,
     UsersModule,
     EmailModule,
+    UploadModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
