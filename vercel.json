@@ -23,5 +23,15 @@
       "src": "/(.*)",
       "dest": "/dist/main.js"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "3000"
+  },
+  "functions": {
+    "dist/main.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
 }

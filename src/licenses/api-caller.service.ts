@@ -31,6 +31,7 @@ export class ApiCallerService {
       axios.create({
         baseURL: CONFIG.BASE_URL,
         withCredentials: true,
+        timeout: 30000,
         headers: {
           'User-Agent': CONFIG.HEADERS.USER_AGENT,
           Accept: CONFIG.HEADERS.ACCEPT,

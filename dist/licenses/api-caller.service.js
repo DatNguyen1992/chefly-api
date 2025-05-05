@@ -72,6 +72,7 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
         const instance = (0, axios_cookiejar_support_1.wrapper)(axios_1.default.create({
             baseURL: CONFIG.BASE_URL,
             withCredentials: true,
+            timeout: 30000,
             headers: {
                 'User-Agent': CONFIG.HEADERS.USER_AGENT,
                 Accept: CONFIG.HEADERS.ACCEPT,
