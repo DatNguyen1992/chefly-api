@@ -94,9 +94,6 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
             const workerConfig = {
                 logger: (m) => this.logger.log(m),
             };
-            workerConfig.corePath = './src/tesseract/tesseract-core.wasm';
-            workerConfig.workerPath = './src/tesseract/worker.min.js';
-            workerConfig.langPath = 'https://tessdata.projectnaptha.com/4.0.0';
             const worker = await Tesseract.createWorker(workerConfig);
             await worker.loadLanguage('eng');
             await worker.initialize('eng');
