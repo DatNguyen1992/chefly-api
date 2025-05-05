@@ -9,6 +9,7 @@ import { UsersModule } from '@users/users.module';
 import { EmailModule } from './email/email.module';
 import { UploadModule } from './upload/upload.module';
 import { HistoryModule } from './history/history.module';
+import { LicensesModule } from './licenses/licenses.module';
 import configuration from '@config/configuration';
 
 @Module({
@@ -30,6 +31,7 @@ import configuration from '@config/configuration';
     EmailModule,
     UploadModule,
     HistoryModule,
+    LicensesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
