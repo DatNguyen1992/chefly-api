@@ -75,19 +75,21 @@ export class ApiCallerService {
             const workerConfig: any = {
                 logger: (m: any) => this.logger.log(m),
             };
-            workerConfig.corePath = './src/tesseract/tesseract-core.wasm';
-            workerConfig.workerPath = './src/tesseract/worker.min.js';
-            workerConfig.langPath = 'https://tessdata.projectnaptha.com/4.0.0';
+            // workerConfig.corePath = 'https://unpkg.com/tesseract.js-core@v4.0.0/tesseract-core.wasm';
+            // workerConfig.workerPath = 'https://unpkg.com/tesseract.js@v4.1.2/dist/worker.min.js';
+            // workerConfig.langPath = 'https://tessdata.projectnaptha.com/4.0.0';
 
             const worker = await Tesseract.createWorker(workerConfig);
 
+            // Initialize the worker with English language
             await worker.loadLanguage('eng');
             await worker.initialize('eng');
 
+            // Recognize the CAPTCHA text
             const {
                 data: { text },
             } = await worker.recognize(Buffer.from(response.data));
-            await worker.terminate();
+            await worker.terminate(); // Clean up the worker
 
             this.logger.log(`CAPTCHA text: ${text.trim()}`);
             return text.trim();
