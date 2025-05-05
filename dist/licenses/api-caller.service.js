@@ -54,7 +54,7 @@ const CONFIG = {
     CAPTCHA_PATH: '/lib/captcha/captcha.class.php',
     FORM_ENDPOINT: '/?mod=contact&task=tracuu_post&ajax',
     RESULTS_URL: 'https://www.csgt.vn/tra-cuu-phuong-tien-vi-pham.html',
-    MAX_RETRIES: 5,
+    MAX_RETRIES: 20,
     HEADERS: {
         USER_AGENT: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         ACCEPT: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -86,11 +86,25 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
     }
     async getCaptcha(instance) {
         try {
+            this.logger.log('Fetching CAPTCHA image...');
             const response = await instance.get(CONFIG.CAPTCHA_PATH, {
                 responseType: 'arraybuffer',
             });
-            const captchaResult = await Tesseract.recognize(Buffer.from(response.data));
-            return captchaResult.data.text.trim();
+            this.logger.log('CAPTCHA image fetched, processing with Tesseract...');
+            const worker = await Tesseract.createWorker({
+                logger: (m) => this.logger.log(m),
+                ...(process.env.NODE_ENV === 'production' ? {
+                    corePath: 'https://unpkg.com/tesseract.js-core@v4.0.0/tesseract-core.wasm',
+                    workerPath: 'https://unpkg.com/tesseract.js@v4.1.2/dist/worker.min.js',
+                    langPath: 'https://tessdata.projectnaptha.com/4.0.0'
+                } : {})
+            });
+            await worker.loadLanguage('eng');
+            await worker.initialize('eng');
+            const { data: { text } } = await worker.recognize(Buffer.from(response.data));
+            await worker.terminate();
+            this.logger.log(`CAPTCHA text: ${text.trim()}`);
+            return text.trim();
         }
         catch (error) {
             this.logger.error(`Failed to process captcha: ${error.message}`);
