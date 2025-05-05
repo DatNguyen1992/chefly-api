@@ -32,5 +32,10 @@ declare const _default: () => {
     firebase: {
         serviceAccount: string;
     };
+    cloudinary: {
+        cloudinary_cloud_name: string;
+        cloudinary_api_key: string;
+        cloudinary_api_secret: string;
+    };
 };
 export default _default;

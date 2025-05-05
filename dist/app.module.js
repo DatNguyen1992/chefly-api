@@ -24,6 +24,7 @@ const users_module_1 = require("./users/users.module");
 const email_module_1 = require("./email/email.module");
 const upload_module_1 = require("./upload/upload.module");
 const history_module_1 = require("./history/history.module");
+const licenses_module_1 = require("./licenses/licenses.module");
 const configuration_1 = __importDefault(require("./config/configuration"));
 let AppModule = class AppModule {
     constructor() {
@@ -51,6 +52,7 @@ exports.AppModule = AppModule = __decorate([
             email_module_1.EmailModule,
             upload_module_1.UploadModule,
             history_module_1.HistoryModule,
+            licenses_module_1.LicensesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
