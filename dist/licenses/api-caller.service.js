@@ -48,8 +48,6 @@ const common_1 = require("@nestjs/common");
 const axios_1 = __importDefault(require("axios"));
 const Tesseract = __importStar(require("tesseract.js"));
 const qs = __importStar(require("qs"));
-const tough = __importStar(require("tough-cookie"));
-const axios_cookiejar_support_1 = require("axios-cookiejar-support");
 const extract_traffic_violations_service_1 = require("./extract-traffic-violations.service");
 const CONFIG = {
     BASE_URL: 'https://www.csgt.vn',
@@ -68,17 +66,22 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
         this.logger = new common_1.Logger(ApiCallerService_1.name);
     }
     createAxiosInstance() {
-        const jar = new tough.CookieJar();
-        const instance = (0, axios_cookiejar_support_1.wrapper)(axios_1.default.create({
+        const instance = axios_1.default.create({
             baseURL: CONFIG.BASE_URL,
             withCredentials: true,
             timeout: 30000,
             headers: {
                 'User-Agent': CONFIG.HEADERS.USER_AGENT,
-                Accept: CONFIG.HEADERS.ACCEPT,
+                'Accept': CONFIG.HEADERS.ACCEPT,
             },
-            jar,
-        }));
+        });
+        instance.interceptors.response.use((response) => {
+            const cookies = response.headers['set-cookie'];
+            if (cookies) {
+                instance.defaults.headers.common['Cookie'] = cookies.join('; ');
+            }
+            return response;
+        });
         return instance;
     }
     async getCaptcha(instance) {
