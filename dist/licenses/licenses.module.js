@@ -17,8 +17,12 @@ let LicensesModule = class LicensesModule {
 exports.LicensesModule = LicensesModule;
 exports.LicensesModule = LicensesModule = __decorate([
     (0, common_1.Module)({
-        providers: [licenses_service_1.LicenseService, api_caller_service_1.ApiCallerService, extract_traffic_violations_service_1.ExtractTrafficViolationsService],
-        controllers: [licenses_controller_1.LicenseController]
+        providers: [
+            licenses_service_1.LicenseService,
+            api_caller_service_1.ApiCallerService,
+            extract_traffic_violations_service_1.ExtractTrafficViolationsService,
+        ],
+        controllers: [licenses_controller_1.LicenseController],
     })
 ], LicensesModule);
 //# sourceMappingURL=licenses.module.js.map

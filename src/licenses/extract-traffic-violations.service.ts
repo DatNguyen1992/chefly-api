@@ -41,7 +41,8 @@ export class ExtractTrafficViolationsService {
 
     formGroups.each((index, element) => {
       const $element = $(element);
-      const isRecordBoundary = $element.next().is('hr') || $element.prev().is('hr');
+      const isRecordBoundary =
+        $element.next().is('hr') || $element.prev().is('hr');
 
       if (isRecordBoundary && Object.keys(currentViolation).length > 0) {
         currentViolation.resolutionPlaces = resolutionPlaces;
