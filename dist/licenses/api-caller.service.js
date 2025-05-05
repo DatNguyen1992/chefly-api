@@ -72,7 +72,7 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
             timeout: 30000,
             headers: {
                 'User-Agent': CONFIG.HEADERS.USER_AGENT,
-                'Accept': CONFIG.HEADERS.ACCEPT,
+                Accept: CONFIG.HEADERS.ACCEPT,
             },
         });
         instance.interceptors.response.use((response) => {

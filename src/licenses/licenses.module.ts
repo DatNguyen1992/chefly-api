@@ -5,7 +5,11 @@ import { ApiCallerService } from './api-caller.service';
 import { ExtractTrafficViolationsService } from './extract-traffic-violations.service';
 
 @Module({
-  providers: [LicenseService, ApiCallerService, ExtractTrafficViolationsService],
-  controllers: [LicenseController]
+  providers: [
+    LicenseService,
+    ApiCallerService,
+    ExtractTrafficViolationsService,
+  ],
+  controllers: [LicenseController],
 })
 export class LicensesModule {}

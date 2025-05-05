@@ -1,4 +1,10 @@
-import { Controller, Get, Query, HttpStatus, HttpException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  HttpStatus,
+  HttpException,
+} from '@nestjs/common';
 import { LicenseService } from './licenses.service';
 
 @Controller('licenses')
@@ -8,7 +14,10 @@ export class LicenseController {
   @Get()
   async getLicenseViolations(@Query('licensePlate') licensePlate: string) {
     if (!licensePlate) {
-      throw new HttpException('License plate is required', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'License plate is required',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     try {
