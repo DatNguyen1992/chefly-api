@@ -68,7 +68,7 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
     createAxiosInstance() {
         const instance = axios_1.default.create({
             baseURL: CONFIG.BASE_URL,
-            withCredentials: true,
+            withCredentials: false,
             timeout: 30000,
             headers: {
                 'User-Agent': CONFIG.HEADERS.USER_AGENT,
@@ -109,6 +109,8 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
             return await instance.post(CONFIG.FORM_ENDPOINT, formData, {
                 headers: {
                     'Content-Type': CONFIG.HEADERS.CONTENT_TYPE,
+                    'Referer': 'https://www.csgt.vn',
+                    'Origin': 'https://www.csgt.vn',
                 },
             });
         }
