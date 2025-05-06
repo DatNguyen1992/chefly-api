@@ -16,8 +16,8 @@ let LicenseService = class LicenseService {
     constructor(apiCallerService) {
         this.apiCallerService = apiCallerService;
     }
-    async getViolations(licensePlate) {
-        return await this.apiCallerService.callAPI(licensePlate);
+    async getViolations(licensePlate, type) {
+        return await this.apiCallerService.callAPI(licensePlate, type);
     }
 };
 exports.LicenseService = LicenseService;

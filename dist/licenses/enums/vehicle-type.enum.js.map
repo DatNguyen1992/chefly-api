@@ -1,0 +1,1 @@
+{"version":3,"file":"vehicle-type.enum.js","sourceRoot":"","sources":["../../../src/licenses/enums/vehicle-type.enum.ts"],"names":[],"mappings":";;;AAAA,IAAY,WAGX;AAHD,WAAY,WAAW;IACnB,0BAAW,CAAA;IACX,0BAAW,CAAA;AACf,CAAC,EAHW,WAAW,2BAAX,WAAW,QAGtB","sourcesContent":["export enum VehicleType {\r\n    XeHoi = '1',\r\n    XeMay = '2',\r\n}"]}

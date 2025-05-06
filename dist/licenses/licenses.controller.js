@@ -15,16 +15,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LicenseController = void 0;
 const common_1 = require("@nestjs/common");
 const licenses_service_1 = require("./licenses.service");
+const swagger_1 = require("@nestjs/swagger");
+const vehicle_type_enum_1 = require("./enums/vehicle-type.enum");
 let LicenseController = class LicenseController {
     constructor(licenseService) {
         this.licenseService = licenseService;
     }
-    async getLicenseViolations(licensePlate) {
+    async getLicenseViolations(licensePlate, type) {
         if (!licensePlate) {
             throw new common_1.HttpException('License plate is required', common_1.HttpStatus.BAD_REQUEST);
         }
+        if (!type || !Object.values(vehicle_type_enum_1.VehicleType).includes(type)) {
+            throw new common_1.HttpException('Vehicle type must be 1 (Xe Hoi) or 2 (Xe May)', common_1.HttpStatus.BAD_REQUEST);
+        }
         try {
-            const violations = await this.licenseService.getViolations(licensePlate);
+            const violations = await this.licenseService.getViolations(licensePlate, type);
             if (violations) {
                 return { licensePlate, violations };
             }
@@ -40,9 +45,22 @@ let LicenseController = class LicenseController {
 exports.LicenseController = LicenseController;
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiQuery)({
+        name: 'licensePlate',
+        type: String,
+        description: 'License plate number',
+        required: true,
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'type',
+        enum: vehicle_type_enum_1.VehicleType,
+        description: 'Vehicle type (1 for Xe Hoi, 2 for Xe May)',
+        required: true,
+    }),
     __param(0, (0, common_1.Query)('licensePlate')),
+    __param(1, (0, common_1.Query)('type')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], LicenseController.prototype, "getLicenseViolations", null);
 exports.LicenseController = LicenseController = __decorate([
