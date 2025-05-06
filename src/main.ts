@@ -76,17 +76,17 @@ import { TransformInterceptor } from '@common/interceptors/transform.interceptor
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-   // Global pipes
-   app.useGlobalPipes(new ValidationPipe());
+  // Global pipes
+  app.useGlobalPipes(new ValidationPipe());
 
-   // Global filters
-   app.useGlobalFilters(new HttpExceptionFilter());
+  // Global filters
+  app.useGlobalFilters(new HttpExceptionFilter());
 
-   // Global interceptors
-   app.useGlobalInterceptors(new TransformInterceptor());
+  // Global interceptors
+  app.useGlobalInterceptors(new TransformInterceptor());
 
-   // Global prefix
-   app.setGlobalPrefix('api');
+  // Global prefix
+  app.setGlobalPrefix('api');
 
   app.enableCors({
     origin: '*',
@@ -102,6 +102,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+  const PORT = process.env.PORT || 3000;
+  await app.listen(PORT, '0.0.0.0');
 }
 bootstrap();
