@@ -1,7 +1,5 @@
 import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
-import { createWorker } from 'tesseract.js';
-import path from 'path';
 import * as qs from 'qs';
 import { ExtractTrafficViolationsService } from './extract-traffic-violations.service';
 import Tesseract from 'tesseract.js';
