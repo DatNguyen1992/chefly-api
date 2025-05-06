@@ -17,8 +17,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "vercel-build": "npm run build"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^1.4.0",
@@ -40,7 +39,6 @@
     "@types/amqplib": "^0.10.7",
     "@types/mongodb": "^4.0.6",
     "@types/mongoose": "^5.11.96",
-    "@vercel/node": "^5.1.14",
     "amqplib": "^0.10.5",
     "apple-signin-auth": "^1.7.8",
     "axios": "^1.7.9",

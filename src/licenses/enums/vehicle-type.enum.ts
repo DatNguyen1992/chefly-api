@@ -1,4 +1,4 @@
 export enum VehicleType {
-    XeHoi = '1',
-    XeMay = '2',
+  XeHoi = '1',
+  XeMay = '2',
 }
