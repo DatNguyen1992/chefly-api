@@ -43,7 +43,8 @@ jobs:
   check-render-deploy:
     needs: build-and-test # Run after build-and-test job
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+    # Only run on push to main
     steps:
       # Step 1: Checkout the code
       - name: Checkout Code
@@ -80,10 +81,10 @@ jobs:
           echo "Checking deploy status for service ${{ secrets.RENDER_SERVICE_ID }}"
           
           # Wait for deployment to start
-          sleep 10
+          sleep 15
           
           # Poll Render API for deploy status
-          for i in {1..30}; do
+          for i in {1..40}; do
             RESPONSE=$(curl -s -w "\n%{http_code}" \
               -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
               https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys?limit=1)
@@ -97,22 +98,28 @@ jobs:
               exit 1
             fi
             
-            DEPLOY_STATUS=$(echo "$BODY" | jq -r '.[0].status // "unknown"')
+            DEPLOY_STATUS=$(echo "$BODY" | jq -r '.[0].deploy.status // "unknown"')
             echo "Deploy status: $DEPLOY_STATUS"
             
-            if [ "$DEPLOY_STATUS" = "live" ]; then
-              echo "Deployment successful!"
-              exit 0
-            elif [ "$DEPLOY_STATUS" = "failed" ] || [ "$DEPLOY_STATUS" = "canceled" ]; then
-              echo "Deployment failed or was canceled!"
-              exit 1
-            elif [ "$DEPLOY_STATUS" = "unknown" ]; then
-              echo "Unknown deploy status. Response: $BODY"
-              exit 1
-            fi
+            case "$DEPLOY_STATUS" in
+              "live")
+                echo "Deployment successful!"
+                exit 0
+                ;;
+              "failed" | "canceled")
+                echo "Deployment failed or was canceled!"
+                exit 1
+                ;;
+              "created" | "queued" | "build_in_progress" | "update_in_progress")
+                echo "Deployment in progress ($DEPLOY_STATUS), waiting..."
+                ;;
+              *)
+                echo "Unknown deploy status. Response: $BODY"
+                exit 1
+                ;;
+            esac
             
-            echo "Deployment still in progress, waiting..."
-            sleep 10
+            sleep 15
           done
           
           echo "Timeout waiting for deployment to complete"
