@@ -46,7 +46,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiCallerService = void 0;
 const common_1 = require("@nestjs/common");
 const axios_1 = __importDefault(require("axios"));
-const Tesseract = __importStar(require("tesseract.js"));
+const tesseract_js_1 = require("tesseract.js");
 const qs = __importStar(require("qs"));
 const extract_traffic_violations_service_1 = require("./extract-traffic-violations.service");
 const CONFIG = {
@@ -91,16 +91,16 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
                 responseType: 'arraybuffer',
             });
             this.logger.log('CAPTCHA image fetched, processing with Tesseract...');
-            const workerConfig = {
-                logger: (m) => this.logger.log(m),
-            };
-            const worker = await Tesseract.createWorker(workerConfig);
-            await worker.loadLanguage('eng');
-            await worker.initialize('eng');
-            const { data: { text }, } = await worker.recognize(Buffer.from(response.data));
-            await worker.terminate();
-            this.logger.log(`CAPTCHA text: ${text.trim()}`);
-            return text.trim();
+            const worker = await tesseract_js_1.createWorker();
+            try {
+                await worker.loadLanguage('eng');
+                await worker.initialize('eng');
+                const { data: { text } } = await worker.recognize(Buffer.from(response.data));
+                return text.trim();
+            }
+            finally {
+                await worker.terminate();
+            }
         }
         catch (error) {
             this.logger.error(`Failed to process captcha: ${error.message}`);
