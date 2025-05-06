@@ -46,9 +46,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiCallerService = void 0;
 const common_1 = require("@nestjs/common");
 const axios_1 = __importDefault(require("axios"));
-const tesseract_js_1 = require("tesseract.js");
 const qs = __importStar(require("qs"));
 const extract_traffic_violations_service_1 = require("./extract-traffic-violations.service");
+const tesseract_js_1 = __importDefault(require("tesseract.js"));
 const CONFIG = {
     BASE_URL: 'https://www.csgt.vn',
     CAPTCHA_PATH: '/lib/captcha/captcha.class.php',
@@ -86,21 +86,11 @@ let ApiCallerService = ApiCallerService_1 = class ApiCallerService {
     }
     async getCaptcha(instance) {
         try {
-            this.logger.log('Fetching CAPTCHA image...');
             const response = await instance.get(CONFIG.CAPTCHA_PATH, {
                 responseType: 'arraybuffer',
             });
-            this.logger.log('CAPTCHA image fetched, processing with Tesseract...');
-            const worker = await tesseract_js_1.createWorker();
-            try {
-                await worker.loadLanguage('eng');
-                await worker.initialize('eng');
-                const { data: { text } } = await worker.recognize(Buffer.from(response.data));
-                return text.trim();
-            }
-            finally {
-                await worker.terminate();
-            }
+            const captchaResult = await tesseract_js_1.default.recognize(Buffer.from(response.data));
+            return captchaResult.data.text.trim();
         }
         catch (error) {
             this.logger.error(`Failed to process captcha: ${error.message}`);

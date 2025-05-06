@@ -4,6 +4,7 @@ import { createWorker } from 'tesseract.js';
 import path from 'path';
 import * as qs from 'qs';
 import { ExtractTrafficViolationsService } from './extract-traffic-violations.service';
+import Tesseract from 'tesseract.js';
 
 const CONFIG = {
     BASE_URL: 'https://www.csgt.vn',
@@ -47,57 +48,57 @@ export class ApiCallerService {
         return instance;
     }
 
-    //   private async getCaptcha(instance: AxiosInstance): Promise<string> {
-    //     try {
-    //       const response = await instance.get(CONFIG.CAPTCHA_PATH, {
-    //         responseType: 'arraybuffer',
-    //       });
-    //       const captchaResult = await Tesseract.recognize(
-    //         Buffer.from(response.data),
-    //       );
-    //       return captchaResult.data.text.trim();
-    //     } catch (error) {
-    //       this.logger.error(`Failed to process captcha: ${error.message}`);
-    //       throw new HttpException(
-    //         'Failed to process captcha',
-    //         HttpStatus.INTERNAL_SERVER_ERROR,
-    //       );
-    //     }
-    //   }
-
-    private async getCaptcha(instance: AxiosInstance): Promise<string> {
+      private async getCaptcha(instance: AxiosInstance): Promise<string> {
         try {
-            this.logger.log('Fetching CAPTCHA image...');
-            const response = await instance.get(CONFIG.CAPTCHA_PATH, {
-                responseType: 'arraybuffer',
-            });
-            this.logger.log('CAPTCHA image fetched, processing with Tesseract...');
-    
-            // Initialize Tesseract worker with minimal configuration
-            const worker = await (createWorker as any)();
-
-            try {
-                // Load only the English language
-                await (worker as any).loadLanguage('eng');
-                await (worker as any).initialize('eng');
-                
-                // Process the image
-                const { data: { text } } = await (worker as any).recognize(
-                    Buffer.from(response.data)
-                );
-                
-                return text.trim();
-            } finally {
-                await (worker as any).terminate();
-            }
+          const response = await instance.get(CONFIG.CAPTCHA_PATH, {
+            responseType: 'arraybuffer',
+          });
+          const captchaResult = await Tesseract.recognize(
+            Buffer.from(response.data),
+          );
+          return captchaResult.data.text.trim();
         } catch (error) {
-            this.logger.error(`Failed to process captcha: ${error.message}`);
-            throw new HttpException(
-                'Failed to process captcha',
-                HttpStatus.INTERNAL_SERVER_ERROR,
-            );
+          this.logger.error(`Failed to process captcha: ${error.message}`);
+          throw new HttpException(
+            'Failed to process captcha',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
         }
-    }
+      }
+
+    // private async getCaptcha(instance: AxiosInstance): Promise<string> {
+    //     try {
+    //         this.logger.log('Fetching CAPTCHA image...');
+    //         const response = await instance.get(CONFIG.CAPTCHA_PATH, {
+    //             responseType: 'arraybuffer',
+    //         });
+    //         this.logger.log('CAPTCHA image fetched, processing with Tesseract...');
+    
+    //         // Initialize Tesseract worker with minimal configuration
+    //         const worker = await (createWorker as any)();
+
+    //         try {
+    //             // Load only the English language
+    //             await (worker as any).loadLanguage('eng');
+    //             await (worker as any).initialize('eng');
+                
+    //             // Process the image
+    //             const { data: { text } } = await (worker as any).recognize(
+    //                 Buffer.from(response.data)
+    //             );
+                
+    //             return text.trim();
+    //         } finally {
+    //             await (worker as any).terminate();
+    //         }
+    //     } catch (error) {
+    //         this.logger.error(`Failed to process captcha: ${error.message}`);
+    //         throw new HttpException(
+    //             'Failed to process captcha',
+    //             HttpStatus.INTERNAL_SERVER_ERROR,
+    //         );
+    //     }
+    // }
 
     private async postFormData(
         instance: AxiosInstance,
