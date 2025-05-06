@@ -39,3 +39,56 @@ jobs:
       # Step 5: Build the project
       - name: Build Project
         run: npm run build
+
+  check-render-deploy:
+    needs: build-and-test # Run after build-and-test job
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' 
+    # Only run on push to main
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Install curl and jq (for API calls)
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y curl jq
+
+      # Step 3: Trigger Render deploy
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
+        continue-on-error: true # Continue even if trigger fails (we'll check status next)
+
+      # Step 4: Check Render deploy status
+      - name: Check Render Deploy Status
+        run: |
+          # Wait for deployment to start (initial delay)
+          sleep 10
+          
+          # Poll Render API for deploy status
+          for i in {1..30}; do
+            DEPLOY_STATUS=$(curl -s \
+              -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+              https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys?limit=1 | \
+              jq -r '.[0].status')
+            
+            echo "Deploy status: $DEPLOY_STATUS"
+            
+            if [ "$DEPLOY_STATUS" = "live" ]; then
+              echo "Deployment successful!"
+              exit 0
+            elif [ "$DEPLOY_STATUS" = "failed" ] || [ "$DEPLOY_STATUS" = "canceled" ]; then
+              echo "Deployment failed or was canceled!"
+              exit 1
+            fi
+            
+            echo "Deployment still in progress, waiting..."
+            sleep 10
+          done
+          
+          echo "Timeout waiting for deployment to complete"
+          exit 1
