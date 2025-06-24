@@ -17,7 +17,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     const redisConfig = {
-      host: 'eminent-moose-52503.upstash.io',
+      host: 'humane-thrush-11674.upstash.io',
       port: 6379,
       password:
         this.configService.get('redis.password') || 'your-password-here', // Replace with actual password or use environment variable
